@@ -9,7 +9,10 @@ public class PlayerController : MonoBehaviour
     public float yawSpeed = 1.0f;
     public float moveSpeed = 1.0f;
     public float jumpSpeed = 1.0f;
+    public float beesPerSecond = 1.0f;
     public Transform viewCamera;
+    public Transform beeShootPosition;
+    public GameObject beePrefab;
 
     private float m_yaw = 0.0f;
     private float m_pitch = 0.0f;
@@ -17,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private float m_TimeSinceJumpPressed = 1.0f;
     private int m_mask;
+    private float m_ShootBeeTimer = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +71,16 @@ public class PlayerController : MonoBehaviour
         }
         m_TimeSinceJumpPressed += Time.deltaTime;
         m_Rigidbody.velocity += Vector3.down * gravityScale * Time.deltaTime;
+        // handle shoot
+        if (Input.GetMouseButton(0)) {
+            if (m_ShootBeeTimer <= 0.0f) {
+                m_ShootBeeTimer = 1.0f;
+                GameObject bee = Instantiate(beePrefab, beeShootPosition.position, Quaternion.identity);
+                BeeController beeController = bee.GetComponent<BeeController>();
+                beeController.Shoot(viewCamera.forward);
+            }
+        }
+        m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
     }
 
     private bool CanJump() {
