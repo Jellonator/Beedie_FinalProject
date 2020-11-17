@@ -206,4 +206,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pitchSpeed: 2
   yawSpeed: 2
+  moveSpeed: 5
   camera: {fileID: 6163395466611363251}
