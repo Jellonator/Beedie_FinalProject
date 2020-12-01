@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 1.0f;
     public float jumpSpeed = 1.0f;
     public float beesPerSecond = 1.0f;
+    public int maximumAmmo = 10;
     public Transform viewCamera;
     public Transform beeShootPosition;
     public GameObject beePrefab;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private float m_TimeSinceJumpPressed = 1.0f;
     private int m_mask;
     private float m_ShootBeeTimer = 0.0f;
+    private int m_ammo;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         m_Rigidbody = GetComponent<Rigidbody>();
         m_mask = LayerMask.GetMask(new string [] {"Solid"});
+        m_ammo = maximumAmmo;
     }
 
     void Update()
@@ -73,11 +77,9 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.velocity += Vector3.down * gravityScale * Time.deltaTime;
         // handle shoot
         if (Input.GetMouseButton(0)) {
-            if (m_ShootBeeTimer <= 0.0f) {
+            if (m_ShootBeeTimer <= 0.0f && CanShoot()) {
                 m_ShootBeeTimer = 1.0f;
-                GameObject bee = Instantiate(beePrefab, beeShootPosition.position, Quaternion.identity);
-                BeeController beeController = bee.GetComponent<BeeController>();
-                beeController.Shoot(viewCamera.forward);
+                Shoot();
             }
         }
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
@@ -89,5 +91,23 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = Vector3.down;
         Quaternion orientation = Quaternion.identity;
         return Physics.BoxCast(center, extents, direction, orientation, 0.5f, m_mask);
+    }
+
+    public void AddBee() {
+        m_ammo = Math.Min(m_ammo+1, maximumAmmo);
+    }
+
+    bool CanShoot() {
+        return m_ammo > 0;
+    }
+
+    void Shoot() {
+        if (!CanShoot()) {
+            return;
+        }
+        GameObject bee = Instantiate(beePrefab, beeShootPosition.position, Quaternion.identity);
+        BeeController beeController = bee.GetComponent<BeeController>();
+        beeController.Shoot(viewCamera.forward);
+        m_ammo -= 1;
     }
 }
