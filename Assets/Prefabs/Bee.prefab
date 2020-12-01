@@ -157,7 +157,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de74325e241ca2e4bb4b21acf25a2dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maximumShootTime: 2
   speed: 10
+  wallCollider: {fileID: 423013864725197081}
 --- !u!1001 &3135147349043582976
 PrefabInstance:
   m_ObjectHideFlags: 0

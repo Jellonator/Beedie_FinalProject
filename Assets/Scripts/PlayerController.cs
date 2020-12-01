@@ -6,25 +6,43 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    /// The player's gravity scale
     public float gravityScale = 1.0f;
+    /// The pitch speed for camera controls
     public float pitchSpeed = 1.0f;
+    /// The yaw speed for camera controls
     public float yawSpeed = 1.0f;
+    /// Player's move speed
     public float moveSpeed = 1.0f;
+    /// Player's jump speed
     public float jumpSpeed = 1.0f;
+    /// Amount of bees that the player can shoot per second
     public float beesPerSecond = 1.0f;
+    /// Maximum ammo that the player can hold
     public int maximumAmmo = 10;
+    /// The Player's camera object
     public Transform viewCamera;
+    /// The position that the player will shoot from
     public Transform beeShootPosition;
+    /// The bee prefab that will be shot
     public GameObject beePrefab;
+    /// The text object to update when changing ammo
     public Text ammoText;
 
+    /// The player's current camera yaw
     private float m_yaw = 0.0f;
+    /// The player's current camera pitch
     private float m_pitch = 0.0f;
 
+    /// The player's rigidbody component
     private Rigidbody m_Rigidbody;
+    /// The amount of time since the player has pressed the jump objects
     private float m_TimeSinceJumpPressed = 1.0f;
+    /// the collision mask for solid objects
     private int m_mask;
+    /// The timer used to control shooting bees
     private float m_ShootBeeTimer = 0.0f;
+    /// Amount of ammo that the player currently has
     private int m_ammo;
 
     // Start is called before the first frame update
@@ -87,11 +105,11 @@ public class PlayerController : MonoBehaviour
         }
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
     }
-
+    /// Update the ammo text in the UI
     private void UpdateAmmoText() {
         ammoText.text = m_ammo.ToString() + " / " + maximumAmmo.ToString();
     }
-
+    /// Returns true if the player is able to jump
     private bool CanJump() {
         Vector3 center = new Vector3(0.0f, 0.5f, 0.0f) + transform.position;
         Vector3 extents = new Vector3(0.5f, 0.1f, 0.5f);
@@ -99,24 +117,28 @@ public class PlayerController : MonoBehaviour
         Quaternion orientation = Quaternion.identity;
         return Physics.BoxCast(center, extents, direction, orientation, 0.5f, m_mask);
     }
-
+    /// Add a bee to the player's ammo count
     public void AddBee() {
         m_ammo = Math.Min(m_ammo+1, maximumAmmo);
         UpdateAmmoText();
     }
-
+    /// Returns true if the player is able to shoot
     private bool CanShoot() {
         return m_ammo > 0;
     }
-
+    /// Tell the player to shoot a bee in the direction they are facing
     private void Shoot() {
         if (!CanShoot()) {
             return;
         }
         GameObject bee = Instantiate(beePrefab, beeShootPosition.position, Quaternion.identity);
         BeeController beeController = bee.GetComponent<BeeController>();
-        beeController.Shoot(viewCamera.forward);
+        beeController.Shoot(viewCamera.forward, this);
         m_ammo -= 1;
         UpdateAmmoText();
+    }
+    /// Get the position of the position that the player will shoot bees out of
+    public Vector3 GetMinigunWorldPosition() {
+        return beeShootPosition.position;
     }
 }
