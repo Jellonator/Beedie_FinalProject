@@ -19,7 +19,8 @@ public class BeeController : MonoBehaviour
     public enum BeeState {
         Shooting,
         Returning,
-        StuckWall
+        StuckWall,
+        StuckObject
     }
     /// The Bee's current state
     private BeeState _state;
@@ -29,11 +30,15 @@ public class BeeController : MonoBehaviour
             return _state;
         }
         set {
+            if (m_Liftable != null && value != BeeState.StuckObject) {
+                m_Liftable.RemoveBee();
+                m_Liftable = null;
+            }
             _state = value;
-            if (value == BeeState.Returning) {
-                wallCollider.enabled = false;
-            } else {
+            if (value == BeeState.Shooting) {
                 wallCollider.enabled = true;
+            } else {
+                wallCollider.enabled = false;
             }
         }
     }
@@ -42,6 +47,10 @@ public class BeeController : MonoBehaviour
     /// The amount of time that the bee has been traveling
     /// Only used when state is 'Shooting'
     private float m_ShootTime = 0.0f;
+    /// Object that this bee is currently lifting
+    Liftable m_Liftable = null;
+    /// transform to be applied on top of liftable's transform when attatched
+    Matrix4x4 m_LocalTransform = Matrix4x4.identity;
 
     void Start()
     {
@@ -85,6 +94,24 @@ public class BeeController : MonoBehaviour
             return;
         }
         m_Rigidbody.velocity = Vector3.zero;
-        State = BeeState.StuckWall;
+        Liftable liftable = col.gameObject.GetComponent<Liftable>();
+        if (liftable != null) {
+            m_Liftable = liftable;
+            m_LocalTransform = liftable.transform.worldToLocalMatrix * transform.localToWorldMatrix;
+            liftable.AddBee();
+            State = BeeState.StuckObject;
+        } else {
+            State = BeeState.StuckWall;
+        }
+    }
+
+    void LateUpdate() {
+        // Update the bee's position to match the object it is attatched to
+        if (State == BeeState.StuckObject && m_Liftable != null) {
+            Matrix4x4 tx = m_Liftable.transform.localToWorldMatrix * m_LocalTransform;
+            transform.position = new Vector3(tx.m03, tx.m13, tx.m23);
+            transform.rotation = tx.rotation;
+            transform.localScale = tx.lossyScale;
+        }
     }
 }
