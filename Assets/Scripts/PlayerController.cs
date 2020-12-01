@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public Transform viewCamera;
     public Transform beeShootPosition;
     public GameObject beePrefab;
+    public Text ammoText;
 
     private float m_yaw = 0.0f;
     private float m_pitch = 0.0f;
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_mask = LayerMask.GetMask(new string [] {"Solid"});
         m_ammo = maximumAmmo;
+        UpdateAmmoText();
     }
 
     void Update()
@@ -85,6 +88,10 @@ public class PlayerController : MonoBehaviour
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
     }
 
+    private void UpdateAmmoText() {
+        ammoText.text = m_ammo.ToString() + " / " + maximumAmmo.ToString();
+    }
+
     private bool CanJump() {
         Vector3 center = new Vector3(0.0f, 0.5f, 0.0f) + transform.position;
         Vector3 extents = new Vector3(0.5f, 0.1f, 0.5f);
@@ -95,13 +102,14 @@ public class PlayerController : MonoBehaviour
 
     public void AddBee() {
         m_ammo = Math.Min(m_ammo+1, maximumAmmo);
+        UpdateAmmoText();
     }
 
-    bool CanShoot() {
+    private bool CanShoot() {
         return m_ammo > 0;
     }
 
-    void Shoot() {
+    private void Shoot() {
         if (!CanShoot()) {
             return;
         }
@@ -109,5 +117,6 @@ public class PlayerController : MonoBehaviour
         BeeController beeController = bee.GetComponent<BeeController>();
         beeController.Shoot(viewCamera.forward);
         m_ammo -= 1;
+        UpdateAmmoText();
     }
 }
