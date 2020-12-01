@@ -241,6 +241,9 @@ MonoBehaviour:
   moveSpeed: 5
   jumpSpeed: 7
   beesPerSecond: 5
+  maximumAmmo: 10
+  beeCrosshairRange: 0.99
   viewCamera: {fileID: 6163395466611363251}
   beeShootPosition: {fileID: 668055999573444152}
   beePrefab: {fileID: 6914403338813009736, guid: cdf791380c29bb58ea17db345388828f, type: 3}
+  ammoText: {fileID: 0}

@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public float beesPerSecond = 1.0f;
     /// Maximum ammo that the player can hold
     public int maximumAmmo = 10;
+    /// Dot value that controls range in which bees will be returned when right clicking
+    public float beeCrosshairRange = 0.5f;
     /// The Player's camera object
     public Transform viewCamera;
     /// The position that the player will shoot from
@@ -104,6 +106,26 @@ public class PlayerController : MonoBehaviour
             }
         }
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
+        // handle bee return
+        if (Input.GetKey(KeyCode.Q)) {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("Bee");
+            foreach (GameObject beeobject in objects) {
+                BeeController bee = beeobject.GetComponent<BeeController>();
+                bee.State = BeeController.BeeState.Returning;
+            }
+        } else if (Input.GetMouseButton(1)) {
+            Vector3 direction = viewCamera.forward;
+            Vector3 position = viewCamera.position;
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("Bee");
+            foreach (GameObject beeobject in objects) {
+                BeeController bee = beeobject.GetComponent<BeeController>();
+                Vector3 beeposition = beeobject.transform.position;
+                Vector3 beedirection = (beeposition - position).normalized;
+                if (Vector3.Dot(direction, beedirection) >= beeCrosshairRange) {
+                    bee.State = BeeController.BeeState.Returning;
+                }
+            }
+        }
     }
     /// Update the ammo text in the UI
     private void UpdateAmmoText() {

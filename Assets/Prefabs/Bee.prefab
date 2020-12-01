@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5159981476683780917}
   m_Layer: 10
   m_Name: Bee
-  m_TagString: Untagged
+  m_TagString: Bee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de74325e241ca2e4bb4b21acf25a2dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumShootTime: 2
+  maximumShootTime: 5
   speed: 10
   wallCollider: {fileID: 423013864725197081}
 --- !u!1001 &3135147349043582976
