@@ -39,22 +39,23 @@ public class Liftable : MonoBehaviour
             m_Rigidbody.velocity += Vector3.down * gravityScale * 9.8f * Time.deltaTime;
         }
     }
-
+    /// Add a bee to this liftable's bee count
     public void AddBee() {
         m_bees += 1;
         UpdateBeeCounter();
     }
-
+    /// Add a bee to this liftable's bee count
     public void RemoveBee() {
         m_bees -= 1;
         UpdateBeeCounter();
     }
-
+    /// Update the bee counter text
     private void UpdateBeeCounter() {
         beeCounter.text = m_bees.ToString() + "/" + beeRequirement.ToString();
     }
 
     void LateUpdate() {
+        // Make the bee counter look at the camera
         beeCounter.transform.LookAt(Camera.current.transform.position, Vector3.up);
     }
 }

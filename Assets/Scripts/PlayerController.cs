@@ -163,4 +163,10 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetMinigunWorldPosition() {
         return beeShootPosition.position;
     }
+    /// Add more maximum ammo
+    public void AddMaximumAmmo(int amount) {
+        maximumAmmo += amount;
+        m_ammo += amount;
+        UpdateAmmoText();
+    }
 }
