@@ -17,12 +17,15 @@ public class Liftable : MonoBehaviour
     private int m_bees = 0;
     /// RigidBody component
     Rigidbody m_Rigidbody;
+    /// Height to position the bee counter at
+    private Vector3 m_beeCounterOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.useGravity = false;
+        m_beeCounterOffset = beeCounter.transform.position - transform.position;
         UpdateBeeCounter();
     }
 
@@ -56,6 +59,7 @@ public class Liftable : MonoBehaviour
 
     void LateUpdate() {
         // Make the bee counter look at the camera
-        beeCounter.transform.LookAt(Camera.current.transform.position, Vector3.up);
+        beeCounter.transform.position = transform.position + m_beeCounterOffset;
+        beeCounter.transform.LookAt(Camera.main.transform.position, Vector3.up);
     }
 }
