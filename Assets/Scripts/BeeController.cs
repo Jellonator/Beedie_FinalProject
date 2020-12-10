@@ -91,7 +91,7 @@ public class BeeController : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (State == BeeState.Returning) {
+        if (State != BeeState.Shooting) {
             return;
         }
         m_Rigidbody.velocity = Vector3.zero;

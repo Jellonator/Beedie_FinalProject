@@ -69,7 +69,7 @@ public class Liftable : MonoBehaviour
     void LateUpdate() {
         // Make the bee counter look at the camera
         beeCounterTransform.transform.position = transform.position + m_beeCounterOffset;
-        beeCounterTransform.transform.localScale = Vector3.one * (1.0f / transform.localScale.magnitude);
+        // beeCounterTransform.transform.
         Vector3 diff = Camera.main.transform.position - beeCounterTransform.position;
         beeCounterTransform.transform.LookAt(beeCounterTransform.position - diff * 2.0f, Vector3.up);
     }
