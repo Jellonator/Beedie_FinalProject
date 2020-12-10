@@ -18,6 +18,12 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 1.0f;
     /// Amount of bees that the player can shoot per second
     public float beesPerSecond = 1.0f;
+    /// Rev time
+    public float revTime = 0.5f;
+    /// Rev slowdown
+    public float revSpeedScale = 0.5f;
+    /// Rev animation speed; degrees per second
+    public float revAnimationSpeed = 1.0f;
     /// Maximum ammo that the player can hold
     public int maximumAmmo = 10;
     /// Dot value that controls range in which bees will be returned when right clicking
@@ -30,6 +36,10 @@ public class PlayerController : MonoBehaviour
     public GameObject beePrefab;
     /// The text object to update when changing ammo
     public Text ammoText;
+    /// The barrel
+    public Transform barrelTransform;
+    /// The bee return position
+    public Transform beeReturnPosition;
 
     /// The player's current camera yaw
     private float m_yaw = 0.0f;
@@ -46,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private float m_ShootBeeTimer = 0.0f;
     /// Amount of ammo that the player currently has
     private int m_ammo;
+    /// Current rev
+    private float m_rev = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -100,11 +112,18 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.velocity += Vector3.down * gravityScale * Time.deltaTime;
         // handle shoot
         if (Input.GetMouseButton(0)) {
-            if (m_ShootBeeTimer <= 0.0f && CanShoot()) {
-                m_ShootBeeTimer = 1.0f;
-                Shoot();
-            }
+            m_rev = Mathf.Clamp(m_rev + Time.deltaTime, 0.0f, revTime);
+        } else {
+            m_rev = Mathf.Clamp(m_rev - Time.deltaTime, 0.0f, revTime);
         }
+        if (m_ShootBeeTimer <= 0.0f && CanShoot()) {
+            m_ShootBeeTimer = 1.0f;
+            Shoot();
+        }
+        // Vector3 barrelRot = barrelTransform.localEulerAngles;
+        // barrelRot.x = barrelRot.x + ;
+        // barrelTransform.localEulerAngles = barrelRot;
+        barrelTransform.Rotate(Vector3.up, Time.deltaTime * revAnimationSpeed * (m_rev / revTime), Space.Self);
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
         // handle bee return
         if (Input.GetKey(KeyCode.Q)) {
@@ -146,7 +165,7 @@ public class PlayerController : MonoBehaviour
     }
     /// Returns true if the player is able to shoot
     private bool CanShoot() {
-        return m_ammo > 0;
+        return m_ammo > 0 && m_rev >= revTime;
     }
     /// Tell the player to shoot a bee in the direction they are facing
     private void Shoot() {
@@ -161,7 +180,7 @@ public class PlayerController : MonoBehaviour
     }
     /// Get the position of the position that the player will shoot bees out of
     public Vector3 GetMinigunWorldPosition() {
-        return beeShootPosition.position;
+        return beeReturnPosition.position;
     }
     /// Add more maximum ammo
     public void AddMaximumAmmo(int amount) {
