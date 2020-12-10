@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Liftable : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class Liftable : MonoBehaviour
     /// Extra velocity for every extra bee
     public float liftScale = 0.1f;
     /// Text Mesh to show attatched bees
-    public TextMesh beeCounter;
+    public TextMeshPro beeCounter;
+    /// Text Mesh Transform
+    public Transform beeCounterTransform;
     /// Mass to use when lifting
     public float massLift = 1.0f;
     /// Mass to use when dropped
@@ -29,7 +32,7 @@ public class Liftable : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.useGravity = false;
-        m_beeCounterOffset = beeCounter.transform.position - transform.position;
+        m_beeCounterOffset = beeCounterTransform.transform.position - transform.position;
         UpdateBeeCounter();
     }
 
@@ -65,7 +68,8 @@ public class Liftable : MonoBehaviour
 
     void LateUpdate() {
         // Make the bee counter look at the camera
-        beeCounter.transform.position = transform.position + m_beeCounterOffset;
-        beeCounter.transform.LookAt(Camera.main.transform.position, Vector3.up);
+        beeCounterTransform.transform.position = transform.position + m_beeCounterOffset;
+        Vector3 diff = Camera.main.transform.position - beeCounterTransform.position;
+        beeCounterTransform.transform.LookAt(beeCounterTransform.position - diff * 2.0f, Vector3.up);
     }
 }

@@ -52,8 +52,9 @@ public class BeeController : MonoBehaviour
     /// transform to be applied on top of liftable's transform when attatched
     Matrix4x4 m_LocalTransform = Matrix4x4.identity;
 
-    void Start()
+    void Awake()
     {
+        // Awake used here since OnCollisionEnter can be called before Start
         m_Rigidbody = GetComponent<Rigidbody>();
         State = BeeState.Shooting;
     }
