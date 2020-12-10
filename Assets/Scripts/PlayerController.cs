@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource sfxRev;
     /// Audio player for shüt
     public AudioSource sfxShoot;
+    /// Audio player for upgrade
+    public AudioSource sfxUpgrade;
 
     /// The player's current camera yaw
     private float m_yaw = 0.0f;
@@ -208,5 +210,6 @@ public class PlayerController : MonoBehaviour
         maximumAmmo += amount;
         m_ammo += amount;
         UpdateAmmoText();
+        sfxUpgrade.Play();
     }
 }
