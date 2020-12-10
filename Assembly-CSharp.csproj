@@ -40,6 +40,7 @@
      <Compile Include="Assets\Scripts\HivePickup.cs" />
      <Compile Include="Assets\Scripts\BeeController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <None Include="Assets\KenneyCastleKit\License.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/home/jellonator/App/Unity/2020.1.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
