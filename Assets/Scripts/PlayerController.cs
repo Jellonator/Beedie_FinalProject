@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
     public Transform beeReturnPosition;
     /// Audio player for rev sound
     public AudioSource sfxRev;
+    /// Audio player for shüt
+    public AudioSource sfxShoot;
 
     /// The player's current camera yaw
     private float m_yaw = 0.0f;
@@ -195,6 +197,7 @@ public class PlayerController : MonoBehaviour
         beeController.Shoot(viewCamera.forward, this);
         m_ammo -= 1;
         UpdateAmmoText();
+        sfxShoot.Play();
     }
     /// Get the position of the position that the player will shoot bees out of
     public Vector3 GetMinigunWorldPosition() {
