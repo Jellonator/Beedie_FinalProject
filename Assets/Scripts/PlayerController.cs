@@ -120,9 +120,6 @@ public class PlayerController : MonoBehaviour
             m_ShootBeeTimer = 1.0f;
             Shoot();
         }
-        // Vector3 barrelRot = barrelTransform.localEulerAngles;
-        // barrelRot.x = barrelRot.x + ;
-        // barrelTransform.localEulerAngles = barrelRot;
         barrelTransform.Rotate(Vector3.up, Time.deltaTime * revAnimationSpeed * (m_rev / revTime), Space.Self);
         m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
         // handle bee return

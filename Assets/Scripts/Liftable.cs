@@ -12,6 +12,10 @@ public class Liftable : MonoBehaviour
     public float liftScale = 0.1f;
     /// Text Mesh to show attatched bees
     public TextMesh beeCounter;
+    /// Mass to use when lifting
+    public float massLift = 1.0f;
+    /// Mass to use when dropped
+    public float massDrop = 100.0f;
 
     /// Number of attached bees
     private int m_bees = 0;
@@ -37,9 +41,11 @@ public class Liftable : MonoBehaviour
             Vector3 velocity = m_Rigidbody.velocity;
             velocity.y = Mathf.Clamp(velocity.y + lift * Time.deltaTime, velocity.y, lift);
             m_Rigidbody.velocity = velocity;
+            m_Rigidbody.mass = massLift;
         } else {
             float gravityScale = 0.1f + 0.9f * (1.0f - ((float)m_bees / (float)beeRequirement));
             m_Rigidbody.velocity += Vector3.down * gravityScale * 9.8f * Time.deltaTime;
+            m_Rigidbody.mass = massDrop;
         }
     }
     /// Add a bee to this liftable's bee count
