@@ -51,6 +51,10 @@ public class BeeController : MonoBehaviour
     Liftable m_Liftable = null;
     /// transform to be applied on top of liftable's transform when attatched
     Matrix4x4 m_LocalTransform = Matrix4x4.identity;
+    /// Sound to play when hit wall
+    public AudioSource sfxHitWall;
+    /// Sound to play when hit object
+    public AudioSource sfxHitObject;
 
     void Awake()
     {
@@ -101,8 +105,10 @@ public class BeeController : MonoBehaviour
             m_LocalTransform = liftable.transform.worldToLocalMatrix * transform.localToWorldMatrix;
             liftable.AddBee();
             State = BeeState.StuckObject;
+            sfxHitObject.Play();
         } else {
             State = BeeState.StuckWall;
+            sfxHitWall.Play();
         }
     }
 
