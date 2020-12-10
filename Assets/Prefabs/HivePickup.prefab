@@ -123,6 +123,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 56.57
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2d112af63a4d7a76788d1c58ac9fb5c4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: aae1987278e20b560bf90e5dffb1d255, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 2d112af63a4d7a76788d1c58ac9fb5c4, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 748aa5ad6ec1ac0639b74d99b65d5998, type: 2}
     - target: {fileID: 919132149155446097, guid: 2d112af63a4d7a76788d1c58ac9fb5c4, type: 3}
       propertyPath: m_Name
       value: hive
