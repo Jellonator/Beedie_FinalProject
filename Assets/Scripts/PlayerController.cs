@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
     public Transform barrelTransform;
     /// The bee return position
     public Transform beeReturnPosition;
+    /// Audio player for rev sound
+    public AudioSource sfxRev;
 
     /// The player's current camera yaw
     private float m_yaw = 0.0f;
@@ -99,7 +101,12 @@ public class PlayerController : MonoBehaviour
         Vector3 dir_right = viewCamera.right;
         dir_right.y = 0.0f;
         dir_right = dir_right.normalized;
-        Vector3 new_velocity = (dir_forward * movement.y + dir_right * movement.x) * moveSpeed;
+        // change speed based on rev state
+        float actualSpeed = moveSpeed;
+        if (m_rev > 0.0f) {
+            actualSpeed = revSpeedScale * moveSpeed;
+        }
+        Vector3 new_velocity = (dir_forward * movement.y + dir_right * movement.x) * actualSpeed;
         m_Rigidbody.velocity = new Vector3(new_velocity.x, m_Rigidbody.velocity.y, new_velocity.z);
         // handle jump
         if (m_TimeSinceJumpPressed < 0.1f) {
@@ -120,8 +127,15 @@ public class PlayerController : MonoBehaviour
             m_ShootBeeTimer = 1.0f;
             Shoot();
         }
+        if (m_rev < revTime) {
+            // Reset bee shoot timer while not fully revved.
+            m_ShootBeeTimer = 1.0f;
+        } else {
+            // otherwise, decrement shoot timer
+            m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
+        }
+        // rotate barrel
         barrelTransform.Rotate(Vector3.up, Time.deltaTime * revAnimationSpeed * (m_rev / revTime), Space.Self);
-        m_ShootBeeTimer -= Time.deltaTime * beesPerSecond;
         // handle bee return
         if (Input.GetKey(KeyCode.Q)) {
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Bee");
@@ -142,6 +156,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        // Rev sound
+        if (m_rev <= 0.0f) {
+            sfxRev.Stop();
+        } else if (!sfxRev.isPlaying) {
+            sfxRev.Play();
+        }
+        sfxRev.pitch = 0.1f + (m_rev / revTime) * 0.6f;
     }
     /// Update the ammo text in the UI
     private void UpdateAmmoText() {
