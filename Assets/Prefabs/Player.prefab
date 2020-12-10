@@ -345,10 +345,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: -5215299815803115452, guid: 798f979b5cd16771c88d38c43e4bdeb3, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 623433575273853050, guid: 798f979b5cd16771c88d38c43e4bdeb3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: aae1987278e20b560bf90e5dffb1d255, type: 2}
+    - target: {fileID: 623433575273853050, guid: 798f979b5cd16771c88d38c43e4bdeb3, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 798f979b5cd16771c88d38c43e4bdeb3, type: 3}
       propertyPath: m_Name
       value: beeminigun
